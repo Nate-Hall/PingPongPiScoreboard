@@ -1,29 +1,34 @@
 import time
 import cmd
+import pygame
 
 playerScore = [0, 0]
 served = 0
 serving = 0
 
-def mainLoop(i = 0):
-    while True:
-        x = input("Waiting for input: ")
-        if(x != False):
-            if(x == 'q'):
-                addPoint(0, 1)
-                time.sleep(0.1)
-            if(x == 'w'):
-                addPoint(1, 1)
-                time.sleep(0.1)
-            if(x == 't'):
-                break
-            print(playerScore)
-            print(str(serving))
+pygame.init()
+pygame.joystick.init()
+for i in range(pygame.joystick.get_count()):
+    pygame.joystick.Joystick(i).init()
 
-        if(checkWinner() != False):
-            print("The winner is player " + str(checkWinner()) + "!")
-            print(playerScore)
-            resetGame()
+def checkButtons():
+    for event in pygame.event.get(): # User did something
+        
+        # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN JOYBUTTONUP JOYHATMOTION
+        if event.type == pygame.JOYBUTTONDOWN:
+            if(checkWinner() != False):
+                resetGame()
+            elif event.dict['button'] == 0:
+                addPoint(event.dict['joy'], 1)
+
+def getScores():
+    return playerScore
+
+def getServer():
+    if(served == 1):
+        return serving
+    else:
+        return -1
         
 def addPoint(playerID = 0, amount = 1):
     global served
@@ -65,6 +70,3 @@ def checkWinner():
         ret = False
 
     return ret
-        
-    
-mainLoop()
