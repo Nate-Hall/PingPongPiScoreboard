@@ -36,7 +36,8 @@ root = Tk()
 root.title("Ping Pong Pi")
 
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
-#root.overrideredirect(1)
+root.wm_state("zoomed")
+#root.overrideredirect(True)
 #root.geometry("%dx%d+0+0" % (w, h))
 
 mainframe = ttk.Frame(root, padding="5 5 12 12")
@@ -84,8 +85,8 @@ root.bind("<Escape>", close)
 
 def mainTasks():
     checkButtons()
-    if(checkForExitPress() >= 2):
-            root.after(5000, exitCheck)
+    if(checkForExitPress() > 2):
+            root.after(5000, exitCheck())
     root.after(20, assignVars)
 
     if(checkWinner() != False):

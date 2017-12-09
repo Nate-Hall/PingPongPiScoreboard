@@ -5,12 +5,14 @@ import pygame
 from PingPongPiEloRanking import *
 
 playerScore = [0, 0]
-playerNameNums = [-1, -1]
+playerNameNums = [0, 2]
 served = 0
 serving = 0
 ranked = 0
 
 names = ["Andrew", "Tom", "Nathan"]
+
+exitCount = 0
 
 pygame.init()
 pygame.joystick.init()
@@ -18,6 +20,8 @@ for i in range(pygame.joystick.get_count()):
     pygame.joystick.Joystick(i).init()
 
 def checkButtons():
+    global names
+    global playerNameNums
     for event in pygame.event.get(): # User did something
         
         # Possible joystick actions: JOYAXISMOTION JOYBALLMOTION JOYBUTTONDOWN JOYBUTTONUP JOYHATMOTION
@@ -34,6 +38,7 @@ def checkButtons():
                 else:
                     playerNameNums[0] = 0
             elif event.dict['button'] == 3:
+                global ranked
                 if ranked == 0:
                     ranked = 1
                 else:
@@ -43,10 +48,13 @@ def checkButtons():
                     playerNameNums[1] += 1
                 else:
                     playerNameNums[1] = 0
+        else:
+            closeCount = 0
 
 def checkForExitPress():
-    exitCount = 0
-    
+    global exitCount
+    exitCount
+
     for event in pygame.event.get():
         
         if event.type == pygame.JOYBUTTONDOWN:
@@ -54,6 +62,7 @@ def checkForExitPress():
     return exitCount
 
 def exitCheck():
+    global exitCount
     exitCount = 0
     
     for event in pygame.event.get():
@@ -69,8 +78,9 @@ def getScores():
 def getNames():
     pNames = ["", ""]
     for i in range(len(playerNameNums)):
+        global names
         if playerNameNums[i] >= 0:
-            pNames[i] = names[i] + " (" + str(round(GetElo(names[i]), 0)) + ")"
+            pNames[i] = names[playerNameNums[i]] + " (" + str(round(GetElo(names[i]), 0)) + ")"
         else:
             pNames[i] = "Player " + str(i+1)
 
