@@ -3,8 +3,13 @@ import cmd
 import pygame
 
 playerScore = [0, 0]
+playerNameNums = [-1, -1]
+playerName = ["Player 1", "Player 2"]
 served = 0
 serving = 0
+ranked = 0
+
+names = ["Andrew", "Tom", "Nathan"]
 
 pygame.init()
 pygame.joystick.init()
@@ -20,9 +25,48 @@ def checkButtons():
                 resetGame()
             elif event.dict['button'] == 0:
                 addPoint(event.dict['joy'], 1)
+            elif event.dict['button'] == 1:
+                addPoint(event.dict['joy'], -1)
+            elif event.dict['button'] == 2:
+                #Toggle P0 name
+                pass
+            elif event.dict['button'] == 3:
+                #Toggle ranked on/off
+                pass
+            elif event.dict['button'] == 4:
+                #Toggle P1 name
+                pass
+
+def checkForExitPress():
+    exitCount = 0
+    
+    for event in pygame.event.get():
+        
+        if event.type == pygame.JOYBUTTONDOWN:
+            exitCount += 1
+    return exitCount
+
+def exitCheck():
+    exitCount = 0
+    
+    for event in pygame.event.get():
+        
+        if event.type == pygame.JOYBUTTONDOWN:
+            exitCount += 1
+    if(exitCount >= 2):
+        sys.exit()
 
 def getScores():
     return playerScore
+
+def getNames():
+    pNames = ["", ""]
+    for i in range(len(playerNameNums)):
+        if playerNameNums[i] >= 0:
+            pNames[i] = playerName[i]
+        else:
+            pNames[i] = "Player " + str(i+1)
+    return pNames
 
 def getServer():
     if(served == 1):

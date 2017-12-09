@@ -1,15 +1,24 @@
+import matplotlib
+matplotlib.use('Agg')
+
 from tkinter import *
 from tkinter import ttk
 from tkinter import font
 from PingPongPiScoreboard import *
 from datetime import datetime
+import sys
 
 pScores = [0, 0]
+pNames = ["Player 1", "Player 2"]
 
 def assignVars():
 	pScores = getScores()
 	playerScore0.set(str(pScores[0]))
 	playerScore1.set(str(pScores[1]))
+
+	pNames = getNames()
+	playerName0.set(str(pNames[0]))
+	playerName1.set(str(pNames[1]))
 
 	server = getServer()
 	if(server > -1):
@@ -27,8 +36,8 @@ root = Tk()
 root.title("Ping Pong Pi")
 
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
-root.overrideredirect(1)
-root.geometry("%dx%d+0+0" % (w, h))
+#root.overrideredirect(1)
+#root.geometry("%dx%d+0+0" % (w, h))
 
 mainframe = ttk.Frame(root, padding="5 5 12 12")
 mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
@@ -66,11 +75,17 @@ playerScore1Label.place(relx=0.5, rely=0.5, anchor=CENTER)
 
 for child in mainframe.winfo_children(): child.grid_configure(padx=mainframe.winfo_screenwidth()/6, pady=mainframe.winfo_screenheight()/6)
 
+def close(event):
+        root.withdraw()
+        sys.exit()
+
 root.focus_set()
-root.bind("<Escape>", lambda e: e.widget.quit())
+root.bind("<Escape>", close)
 
 def mainTasks():
     checkButtons()
+    if(checkForExitPress() >= 2):
+            root.after(5000, exitCheck)
     root.after(20, assignVars)
 
     if(checkWinner() != False):
