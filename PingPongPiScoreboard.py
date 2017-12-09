@@ -2,9 +2,10 @@ import time
 import cmd
 import pygame
 
+from PingPongPiEloRanking import *
+
 playerScore = [0, 0]
 playerNameNums = [-1, -1]
-playerName = ["Player 1", "Player 2"]
 served = 0
 serving = 0
 ranked = 0
@@ -28,14 +29,20 @@ def checkButtons():
             elif event.dict['button'] == 1:
                 addPoint(event.dict['joy'], -1)
             elif event.dict['button'] == 2:
-                #Toggle P0 name
-                pass
+                if(playerNameNums[0] + 1 < len(names)):
+                    playerNameNums[0] += 1
+                else:
+                    playerNameNums[0] = 0
             elif event.dict['button'] == 3:
-                #Toggle ranked on/off
-                pass
+                if ranked == 0:
+                    ranked = 1
+                else:
+                    ranked = 0
             elif event.dict['button'] == 4:
-                #Toggle P1 name
-                pass
+                if(playerNameNums[1] + 1 < len(names)):
+                    playerNameNums[1] += 1
+                else:
+                    playerNameNums[1] = 0
 
 def checkForExitPress():
     exitCount = 0
@@ -63,9 +70,12 @@ def getNames():
     pNames = ["", ""]
     for i in range(len(playerNameNums)):
         if playerNameNums[i] >= 0:
-            pNames[i] = playerName[i]
+            pNames[i] = names[i] + " (" + str(round(GetElo(names[i]), 0)) + ")"
         else:
             pNames[i] = "Player " + str(i+1)
+
+        if ranked == 1:
+            pNames[i] = pNames[i].upper()
     return pNames
 
 def getServer():
@@ -96,6 +106,9 @@ def addPoint(playerID = 0, amount = 1):
 
 def resetGame():
     global served
+
+    if(ranked == 1):
+        CalculateElo(playerName[0], playerName[1], playerScore[0], playerScore[1])
     
     playerScore[:] = [0, 0]
     served = 0

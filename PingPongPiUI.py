@@ -54,7 +54,7 @@ playerName1.set("Player 2")
 playerScore0.set("0")
 playerScore1.set("0")
 
-f = font.Font(size = int(mainframe.winfo_screenwidth()/30))
+f = font.Font(size = int(mainframe.winfo_screenwidth()/50))
 f0 = font.Font(size = int(mainframe.winfo_screenwidth()/10))
 f1 = font.Font(size = int(mainframe.winfo_screenwidth()/10))
 
