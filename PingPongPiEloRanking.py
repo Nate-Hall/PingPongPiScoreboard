@@ -15,19 +15,19 @@ def CalculateElo(p1ID, p2ID, p1Score, p2Score):
 	newRating1 = GetElo(p1ID) + (K * (result1 - expected1))
 	newRating2 = GetElo(p2ID) + (K * (result2 - expected2))
 
-	RecordGame(p1ID, p2ID, p1Score, p2Score, newRating1 - GetElo(p1ID), newRating2 - GetElo(p2ID))
+	RecordGame(p1ID, p2ID, p1Score, p2Score, round(newRating1, 2) - GetElo(p1ID), round(newRating2, 2) - GetElo(p2ID))
 
-	SetElo(p1ID, newRating1)
-	SetElo(p2ID, newRating2)
+	SetElo(p1ID, round(newRating1, 2))
+	SetElo(p2ID, round(newRating2, 2))
 
 	return GetData()
 
 def RecordGame(p1ID, p2ID, p1Score, p2Score, p1EloChange, p2EloChange):
 	hist = open("RankedHistory.txt", "a")
 	if p1Score > p2Score:
-		hist.write(p1ID + "(+" + p1EloChange + ") " + p1Score + " - " + p2Score + " " + p2ID + "(" + p2EloChange + ")\n")
+		hist.write(p1ID + "(+" + str(round(p1EloChange, 2)) + ") " + str(p1Score) + " - " + str(p2Score) + " " + p2ID + "(" + str(round(p2EloChange, 2)) + ")\n")
 	else:
-		hist.write(p2ID + "(+" + p2EloChange + ") " + p2Score + " - " + p1Score + " " + p1ID + "(" + p1EloChange + ")\n")
+		hist.write(p2ID + "(+" + str(round(p2EloChange, 2)) + ") " + str(p2Score) + " - " + str(p1Score) + " " + p1ID + "(" + str(round(p1EloChange, 2)) + ")\n")
 
 	hist.close()
 
